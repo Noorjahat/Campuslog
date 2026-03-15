@@ -121,47 +121,45 @@ body.dark input{
   </div>
 
   <script>
-const btn = document.getElementById("signupBtn");
+document.getElementById("signupBtn").onclick=function(){
 
-btn.addEventListener("click", function () {
-  const name = document.getElementById("name").value.trim();
-  const user = document.getElementById("user").value.trim();
-  const pass = document.getElementById("pass").value;
-  const pass2 = document.getElementById("pass2").value;
-  const msg = document.getElementById("msg");
+const name=document.getElementById("name").value.trim();
+const user=document.getElementById("user").value.trim();
+const pass=document.getElementById("pass").value;
+const pass2=document.getElementById("pass2").value;
+const msg=document.getElementById("msg");
 
-  if (!name || !user || !pass || !pass2) {
-    msg.style.display = "block";
-    msg.innerText = "All fields required";
-    return;
-  }
-
-  if (pass !== pass2) {
-  msg.style.display = "block";
-  msg.innerText = "Passwords not match";
-  return;
+if(!name||!user||!pass||!pass2){
+msg.style.display="block";
+msg.innerText="All fields required";
+return;
 }
 
-let users = JSON.parse(localStorage.getItem("admins") || "[]");
-
-if (users.find(u => u.user === user)) {
-  msg.style.display = "block";
-  msg.innerText = "Username already exists";
-  return;
+if(pass!==pass2){
+msg.style.display="block";
+msg.innerText="Passwords not match";
+return;
 }
 
-users.push({
-  name: name,
-  user: user,
-  pass: pass
-});
+fetch("/signup",{
+method:"POST",
+headers:{ "Content-Type":"application/json" },
+body:JSON.stringify({name,user,pass})
+})
+.then(res=>res.json())
+.then(d=>{
 
-localStorage.setItem("admins", JSON.stringify(users));
-
+if(d.status==="exists"){
+msg.style.display="block";
+msg.innerText="Username exists";
+}else{
 alert("Signup successful");
-window.location.href = "login.html";
+location.href="login.html";
+}
 
 });
+
+};
 </script>
 
 <script>
