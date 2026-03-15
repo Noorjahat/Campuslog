@@ -176,24 +176,31 @@ body.dark input{
   <!-- login logic -->
   <script>
     function login(){
-      var u = document.getElementById("user").value.trim();
-      var p = document.getElementById("pass").value.trim();
-      var e = document.getElementById("error");
 
-      var users = JSON.parse(localStorage.getItem("admins") || "[]");
+var u=document.getElementById("user").value.trim();
+var p=document.getElementById("pass").value.trim();
+var e=document.getElementById("error");
 
-var found = users.find(x => x.user === u && x.pass === p);
+fetch("/login",{
+method:"POST",
+headers:{ "Content-Type":"application/json" },
+body:JSON.stringify({user:u,pass:p})
+})
+.then(res=>res.json())
+.then(d=>{
 
-if(found){
-  sessionStorage.setItem("loggedIn","true");
-  localStorage.setItem("adminName", found.name);
-  window.location.href = "admin.html";
+if(d.status==="ok"){
+sessionStorage.setItem("loggedIn","true");
+localStorage.setItem("adminName",d.name);
+location.href="admin.html";
+}else{
+e.style.display="block";
+setTimeout(()=>e.style.display="none",3000);
 }
- else {
-        e.style.display = "block";
-        setTimeout(()=> e.style.display = "none", 3000);
-      }
-    }
+
+});
+
+}
   </script>
 
 <script>
