@@ -405,7 +405,9 @@ return JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]");
 
 function renderTable(){
 
-let data=getEntries();
+fetch("/entries")
+.then(res=>res.json())
+.then(data=>{
 const q=document.getElementById("searchInput").value.toLowerCase();
 
 if(q){
@@ -442,7 +444,7 @@ tbody.innerHTML+=`
 </tr>`;
 });
 
-
+});
 }
 
 function sortTable(col){
@@ -633,18 +635,16 @@ function deleteSelected(){
 
   if(!confirm("Delete selected entries?")) return;
 
-  let data = getEntries();
-
   let checks = document.querySelectorAll(".rowCheck:checked");
 
   let ids = Array.from(checks).map(c => c.dataset.id);
 
-  data = data.filter(e => !ids.includes(String(e.time)));
+  Promise.all(ids.map(id => fetch("/delete/"+id)))
+  .then(()=>{
+    renderTable();
+    toggleDeleteBtn();
+  });
 
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-
-  renderTable();
-  toggleDeleteBtn();
 }
 
 function getPCs(){
@@ -669,7 +669,23 @@ return;
 
 pcs.push(code);
 
-localStorage.setItem("adminPCs",JSON.stringify(pcs));
+fetch("/add",{
+method:"POST",
+headers:{ "Content-Type":"application/json" },
+body:JSON.stringify({
+time:new Date().toISOString(),
+name:name,
+enroll:enroll,
+branch:branch,
+course:course,
+pc:pc
+})
+}).then(()=>{
+
+alert("Entry saved");
+renderTable();
+
+});
 
 document.getElementById("pcCodeInput").value="";
 renderPCs();
