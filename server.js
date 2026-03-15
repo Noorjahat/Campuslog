@@ -34,3 +34,30 @@ res.send("deleted");
 app.listen(process.env.PORT || 10000, () => {
   console.log("Server running");
 });
+
+// signup
+app.post("/signup",(req,res)=>{
+let admins=JSON.parse(fs.readFileSync(ADMIN_FILE));
+
+if(admins.find(a=>a.user===req.body.user)){
+return res.json({status:"exists"});
+}
+
+admins.push(req.body);
+fs.writeFileSync(ADMIN_FILE,JSON.stringify(admins));
+
+res.json({status:"ok"});
+});
+
+// login
+app.post("/login",(req,res)=>{
+let admins=JSON.parse(fs.readFileSync(ADMIN_FILE));
+
+let found=admins.find(a=>
+a.user===req.body.user &&
+a.pass===req.body.pass
+);
+
+if(found) res.json({status:"ok",name:found.name});
+else res.json({status:"fail"});
+});
