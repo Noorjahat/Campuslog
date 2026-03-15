@@ -1,3 +1,8 @@
+const ADMIN_FILE = "admins.json";
+
+if(!fs.existsSync(ADMIN_FILE)){
+fs.writeFileSync(ADMIN_FILE,"[]");
+}
 const express = require("express");
 const fs = require("fs");
 
