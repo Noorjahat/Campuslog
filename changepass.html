@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CampusLog – Change Password</title>
+  <style>
+    :root{
+      /* light theme */
+      --bg: #f3f5f9;
+      --card: #ffffff;
+      --text: #111827;
+      --muted: #6b7280;
+      --accent: #2563eb;
+      --shadow: 0 4px 12px rgba(15,23,42,0.06);
+    }
+
+    /* prefer dark if browser/OS says so (fast fallback) */
+    @media (prefers-color-scheme: dark) {
+      :root{
+        --bg: #0b1220;
+        --card: #0f1724;
+        --text: #e6eef8;
+        --muted: #9ca3af;
+        --accent: #60a5fa;
+        --shadow: 0 6px 18px rgba(0,0,0,0.6);
+      }
+    }
+
+    /* explicit dark class takes precedence (set by JS) */
+    body.dark, html.dark {
+      --bg: #0b1220;
+      --card: #0f1724;
+      --text: #e6eef8;
+      --muted: #9ca3af;
+      --accent: #60a5fa;
+      --shadow: 0 6px 18px rgba(0,0,0,0.6);
+    }
+
+    /* apply variables */
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      height:100vh;
+    }
+
+    /* card */
+    .box{
+      background: var(--card);
+      color: var(--text);
+      padding:28px;
+      width:100%;
+      max-width:330px;
+      border-radius:12px;
+      box-shadow: var(--shadow);
+      margin:auto;
+    }
+
+    h2{
+      text-align:center;
+      margin-bottom:20px;
+    }
+
+    input{
+  width:100%;
+  padding:12px 14px;
+  margin:12px 0;
+  border-radius:8px;
+  border:1px solid #d1d5db;
+  background:white;
+  color:#111827;
+  font-size:14px;
+  box-sizing:border-box;
+  outline:none;
+}
+
+body.dark input{
+  border:1px solid #334155;
+  background:#0b1220;
+  color:#e5e7eb;
+}
+
+    input:focus{
+      border-color:#60a5fa;
+      box-shadow:0 0 0 1px #60a5fa;
+    }
+
+    button{
+      width:100%;
+      padding:12px;
+      background: #2563eb;
+      color:white;
+      border:none;
+      font-size:15px;
+      border-radius:8px;
+      cursor:pointer;
+      margin-top:10px;
+    }
+
+    button:hover{
+      filter: brightness(0.9);
+    }
+
+    .msg{
+      font-size:13px;
+      text-align:center;
+      margin-top:6px;
+      color:red;
+      display:none;
+    }
+
+    .pass-box{
+  position:relative;
+}
+
+.pass-box input{
+  padding-right:40px;
+}
+
+.eye{
+  position:absolute;
+  right:12px;
+  top:50%;
+  transform:translateY(-50%);
+  cursor:pointer;
+  font-size:16px;
+  opacity:0.7;
+}
+
+.eye:hover{
+  opacity:1;
+}
+
+  </style>
+</head>
+<body>
+
+<div class="box">
+  <h2>Change Password</h2>
+
+  <div class="pass-box">
+  <input type="password" id="old" placeholder="Old password">
+  <span class="eye" onclick="togglePass('old', this)">👁</span>
+</div>
+
+<div class="pass-box">
+  <input type="password" id="new1" placeholder="New password">
+  <span class="eye" onclick="togglePass('new1', this)">👁</span>
+</div>
+
+<div class="pass-box">
+  <input type="password" id="new2" placeholder="Confirm new password">
+  <span class="eye" onclick="togglePass('new2', this)">👁</span>
+</div>
+
+
+  <button onclick="changePass()">Update Password</button>
+  <div id="msg" class="msg"></div>
+</div>
+
+<!-- CHANGE PASSWORD LOGIC -->
+<script>
+function changePass(){
+  const old = document.getElementById('old').value.trim();
+  const n1  = document.getElementById('new1').value.trim();
+  const n2  = document.getElementById('new2').value.trim();
+  const msg = document.getElementById('msg');
+
+  const current = localStorage.getItem('adminPass');
+
+  if(!old || !n1 || !n2){
+    msg.textContent = "All fields are required";
+    msg.style.display = "block";
+    return;
+  }
+  if(old !== current){
+    msg.textContent = "Old password is incorrect";
+    msg.style.display = "block";
+    return;
+  }
+  if(n1 !== n2){
+    msg.textContent = "New passwords do not match";
+    msg.style.display = "block";
+    return;
+  }
+
+  localStorage.setItem('adminPass', n1);
+  alert("Password updated! Please login again.");
+  sessionStorage.removeItem("loggedIn");
+  window.location.href = "login.html";
+}
+
+const inputs = document.querySelectorAll("input");
+
+inputs.forEach((input, index) => {
+  input.addEventListener("keydown", function(e) {
+
+    if (e.key === "Enter") {
+      e.preventDefault();
+
+      const nextInput = inputs[index + 1];
+
+      if (nextInput) {
+        nextInput.focus();
+      } else {
+        changePass();
+      }
+
+    }
+
+  });
+});
+
+</script>
+
+<script>
+function togglePass(id, el){
+  const input = document.getElementById(id);
+
+  if(input.type === "password"){
+    input.type = "text";
+    el.textContent = "🙈";
+  } else {
+    input.type = "password";
+    el.textContent = "👁";
+  }
+}
+</script>
+
+<script>
+(function(){
+let isDark = localStorage.getItem("theme")==="dark";
+document.body.classList.toggle("dark",isDark);
+})();
+</script>
+
+</body>
+</html>

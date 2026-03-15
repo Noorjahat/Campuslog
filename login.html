@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>CampusLog – Login</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root{
+      --bg: #f3f5f9;
+      --card: #ffffff;
+      --text: #111827;
+      --accent: #2563eb;
+      --shadow: 0 4px 12px rgba(15,23,42,0.06);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root{
+        --bg: #0b1220;
+        --card: #0f1724;
+        --text: #e6eef8;
+        --accent: #60a5fa;
+        --shadow: 0 6px 18px rgba(0,0,0,0.6);
+      }
+    }
+
+    body.dark, html.dark {
+      --bg: #0b1220;
+      --card: #0f1724;
+      --text: #e6eef8;
+      --accent: #60a5fa;
+      --shadow: 0 6px 18px rgba(0,0,0,0.6);
+    }
+
+    html,body { height:100%; }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Inter, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      height:100vh;
+    }
+
+    .box{
+      background: var(--card);
+      color: var(--text);
+      padding:28px;
+      width:320px;
+      border-radius:12px;
+      box-shadow: var(--shadow);
+    }
+
+    h2 { text-align:center; margin-bottom:18px; font-size:20px; }
+
+    input{
+  width:100%;
+  padding:12px 14px;
+  margin:12px 0;
+  border-radius:8px;
+  border:1px solid #d1d5db;
+  background:white;
+  color:#111827;
+  font-size:14px;
+  box-sizing:border-box;
+  outline:none;
+}
+
+body.dark input{
+  border:1px solid #334155;
+  background:#0b1220;
+  color:#e5e7eb;
+}
+
+    input:focus{
+      border-color:#60a5fa;
+      box-shadow:0 0 0 1px #60a5fa;
+    }
+
+    button{
+      width:100%;
+      padding:12px;
+      background: var(--accent);
+      color:white;
+      border:none;
+      border-radius:8px;
+      font-size:16px;
+      cursor:pointer;
+    }
+
+    button:hover{ filter:brightness(0.95); }
+
+    .error{
+      color:#e11d48;
+      font-size:13px;
+      text-align:center;
+      display:none;
+      margin-bottom:6px;
+    }
+
+    a { color: var(--accent); text-decoration:none; font-weight:600; }
+
+    p.small { 
+      text-align:center; 
+      margin-top:12px; 
+      font-size:14px; 
+      color:var(--text); 
+      opacity:0.9; 
+    }
+
+    .pass-box{
+  position:relative;
+}
+
+.pass-box input{
+  padding-right:40px;
+}
+
+.eye{
+  position:absolute;
+  right:12px;
+  top:50%;
+  transform:translateY(-50%);
+  cursor:pointer;
+  font-size:16px;
+  opacity:0.7;
+}
+
+.eye:hover{
+  opacity:1;
+}
+
+  </style>
+</head>
+<body>
+
+  <div class="box">
+    <h2>Admin Login</h2>
+
+    <div class="error" id="error">Invalid username or password</div>
+
+    <input type="text" id="user" placeholder="Username" autocomplete="username">
+    <div class="pass-box">
+  <input type="password" id="pass" placeholder="Password" autocomplete="current-password">
+  <span class="eye" onclick="togglePass('pass', this)">👁</span>
+</div>
+
+
+    <button onclick="login()">Login</button>
+
+    <p class="small">
+      Don’t have an account?
+      <a href="signup.html">Create one</a>
+    </p>
+  </div>
+
+  
+  <!-- ENTER KEY NAVIGATION -->
+  <script>
+    document.getElementById("user").addEventListener("keydown", function(e){
+      if(e.key === "Enter"){
+        e.preventDefault();
+        document.getElementById("pass").focus();
+      }
+    });
+
+    document.getElementById("pass").addEventListener("keydown", function(e){
+      if(e.key === "Enter"){
+        e.preventDefault();
+        login();
+      }
+    });
+  </script>
+
+  <!-- login logic -->
+  <script>
+    function login(){
+      var u = document.getElementById("user").value.trim();
+      var p = document.getElementById("pass").value.trim();
+      var e = document.getElementById("error");
+
+      var users = JSON.parse(localStorage.getItem("admins") || "[]");
+
+var found = users.find(x => x.user === u && x.pass === p);
+
+if(found){
+  sessionStorage.setItem("loggedIn","true");
+  localStorage.setItem("adminName", found.name);
+  window.location.href = "admin.html";
+}
+ else {
+        e.style.display = "block";
+        setTimeout(()=> e.style.display = "none", 3000);
+      }
+    }
+  </script>
+
+<script>
+function togglePass(id, el){
+  const input = document.getElementById(id);
+
+  if(input.type === "password"){
+    input.type = "text";
+    el.textContent = "🙈";
+  } else {
+    input.type = "password";
+    el.textContent = "👁";
+  }
+}
+</script>
+
+<script>
+(function(){
+let isDark = localStorage.getItem("theme")==="dark";
+document.body.classList.toggle("dark",isDark);
+})();
+</script>
+
+</body>
+</html>
