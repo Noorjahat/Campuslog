@@ -26,4 +26,6 @@ fs.writeFileSync(FILE,JSON.stringify(data));
 res.send("deleted");
 });
 
-app.listen(10000);
+app.listen(process.env.PORT || 10000, () => {
+  console.log("Server running");
+});
