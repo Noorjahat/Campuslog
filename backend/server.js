@@ -11,22 +11,6 @@ const path = require("path");
 // ✅ static serve
 app.use(express.static(path.resolve(__dirname, "../../Frontend")));
 
-app.get("/", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "../../Frontend/login.html"));
-});
-
-app.get("/signup", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "../../Frontend/signup.html"));
-});
-
-app.get("/changepass", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "../../Frontend/changepass.html"));
-});
-
-app.get("/admin", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "../../Frontend/admin.html"));
-});
-
 // 🔹 MongoDB connect
 mongoose.connect(process.env.MONGO_URI);
 
