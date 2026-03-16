@@ -181,7 +181,7 @@ var u=document.getElementById("user").value.trim();
 var p=document.getElementById("pass").value.trim();
 var e=document.getElementById("error");
 
-fetch("http://127.0.0.1:5000/login",{
+fetch("/login",{
 method:"POST",
 headers:{ "Content-Type":"application/json" },
 body:JSON.stringify({user:u,pass:p})
