@@ -691,6 +691,10 @@ async function loadDashboard() {
   document.getElementById("monthCount").innerText = monthCount;
 
 }
+
+setInterval(renderTable, 5000);
+setInterval(loadDashboard, 5000);
+
 </script>
 
 </body>
