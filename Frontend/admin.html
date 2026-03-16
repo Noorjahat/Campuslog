@@ -405,7 +405,7 @@ return JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]");
 
 function renderTable(){
 
-fetch("/entries")
+fetch("http://127.0.0.1:5000/api/entries")
 .then(res=>res.json())
 .then(data=>{
 const q=document.getElementById("searchInput").value.toLowerCase();

@@ -77,3 +77,9 @@ app.get("/api/pcs", async (req, res) => {
   const pcs = await PC.find();
   res.json(pcs);
 });
+
+// ✅ GET Entries
+app.get("/api/entries", async (req, res) => {
+  const entries = await Entry.find().sort({ time: -1 });
+  res.json(entries);
+});
