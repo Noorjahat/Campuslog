@@ -84,3 +84,7 @@ app.get("/api/entries", async (req, res) => {
   const entries = await Entry.find().sort({ time: -1 });
   res.json(entries);
 });
+
+const path = require("path");
+
+app.use(express.static(path.join(__dirname, "../")));
