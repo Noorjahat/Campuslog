@@ -511,37 +511,6 @@ el.textContent=Math.round(val);
 
 }
 
-function loadStats(){
-
-const data=getEntries();
-const today=new Date().toLocaleDateString();
-
-let todayCount=data.filter(d =>
-new Date(d.time).toLocaleDateString()==today).length;
-
-let now=new Date();
-
-let weekStart=new Date(now);
-weekStart.setDate(weekStart.getDate()-weekStart.getDay());
-weekStart.setHours(0,0,0,0);
-
-let weekCount=data.filter(d =>
-new Date(d.time)>=weekStart).length;
-
-let m=new Date().getMonth();
-let y=new Date().getFullYear();
-
-let monthCount=data.filter(d=>{
-let dt=new Date(d.time);
-return dt.getMonth()==m && dt.getFullYear()==y;
-}).length;
-
-animate(document.getElementById("todayCount"),todayCount);
-animate(document.getElementById("weekCount"),weekCount);
-animate(document.getElementById("monthCount"),monthCount);
-
-}
-
 /* ENTER KEY = NEXT INPUT FIELD */
 
 document.addEventListener("DOMContentLoaded",function(){
@@ -576,7 +545,7 @@ document.getElementById("welcome").textContent=
 "Welcome, "+(localStorage.getItem("adminName")||"Admin");
 
 applyTheme();
-loadStats();
+loadDashboard();
 renderTable();
 renderPCs();
 };
@@ -722,8 +691,6 @@ async function loadDashboard() {
   document.getElementById("monthCount").innerText = monthCount;
 
 }
-
-loadDashboard();
 </script>
 
 </body>
