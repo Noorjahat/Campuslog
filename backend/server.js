@@ -53,3 +53,21 @@ app.post("/api/entry", async (req, res) => {
 
 
 app.listen(5000, () => console.log("Server running on 5000"));
+
+// ✅ SIGNUP
+app.post("/signup", async (req, res) => {
+  const { user, pass, name } = req.body;
+
+  if (!user || !pass) return res.json({ status: "fail" });
+
+  res.json({ status: "ok" }); // abhi simple rakha
+});
+
+// ✅ LOGIN
+app.post("/login", async (req, res) => {
+  const { user, pass } = req.body;
+
+  if (!user || !pass) return res.json({ status: "fail" });
+
+  res.json({ status: "ok", name: user });
+});
