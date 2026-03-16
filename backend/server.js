@@ -88,3 +88,7 @@ app.get("/api/entries", async (req, res) => {
 const path = require("path");
 
 app.use(express.static(path.join(__dirname, "../")));
+
+app.get("/admin", (req, res) => {
+  res.sendFile(path.join(__dirname, "../admin.html"));
+});
