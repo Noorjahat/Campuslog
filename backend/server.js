@@ -89,3 +89,7 @@ app.get("/api/entries", async (req, res) => {
   const entries = await Entry.find().sort({ time: -1 });
   res.json(entries);
 });
+
+app.get("/", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "../Frontend/login.html"));
+});
