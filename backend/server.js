@@ -1,3 +1,11 @@
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
 const path = require("path");
 
 // 👉 frontend folder serve karega
@@ -10,14 +18,6 @@ app.get("/", (req, res) => {
 app.get("/admin", (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/admin.html"));
 });
-
-const express = require("express");
-const mongoose = require("mongoose");
-const cors = require("cors");
-
-const app = express();
-app.use(cors());
-app.use(express.json());
 
 // 🔹 MongoDB connect
 mongoose.connect(process.env.MONGO_URI);
