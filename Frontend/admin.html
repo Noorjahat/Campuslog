@@ -651,46 +651,6 @@ function getPCs(){
 return JSON.parse(localStorage.getItem("adminPCs")||"[]");
 }
 
-function addPC(){
-
-let code=document.getElementById("pcCodeInput").value.trim();
-
-if(!code){
-alert("Enter PC Code");
-return;
-}
-
-let pcs=getPCs();
-
-if(pcs.includes(code)){
-alert("Already added");
-return;
-}
-
-pcs.push(code);
-
-fetch("/add",{
-method:"POST",
-headers:{ "Content-Type":"application/json" },
-body:JSON.stringify({
-time:new Date().toISOString(),
-name:name,
-enroll:enroll,
-branch:branch,
-course:course,
-pc:pc
-})
-}).then(()=>{
-
-alert("Entry saved");
-renderTable();
-
-});
-
-document.getElementById("pcCodeInput").value="";
-renderPCs();
-}
-
 function renderPCs(){
 
 let pcs=getPCs();
