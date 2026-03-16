@@ -1,3 +1,16 @@
+const path = require("path");
+
+// 👉 frontend folder serve karega
+app.use(express.static(path.join(__dirname, "../frontend")));
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/login.html"));
+});
+
+app.get("/admin", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/admin.html"));
+});
+
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -83,12 +96,4 @@ app.get("/api/pcs", async (req, res) => {
 app.get("/api/entries", async (req, res) => {
   const entries = await Entry.find().sort({ time: -1 });
   res.json(entries);
-});
-
-const path = require("path");
-
-app.use(express.static(path.join(__dirname, "../")));
-
-app.get("/admin", (req, res) => {
-  res.sendFile(path.join(__dirname, "../admin.html"));
 });
