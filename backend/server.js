@@ -29,11 +29,13 @@ const entrySchema = new mongoose.Schema({
   course: String,
   pc: String,
   pcCode: String,
-  time: String
+  entryTime: Date,
+  exitTime: Date
 });
+
 const Entry = mongoose.model("Entry", entrySchema);
 
-app.get("/delete/:time", async (req, res) => {
+app.get("/delete/:id", async (req, res) => {
 
   const time = req.params.time;
 
@@ -57,15 +59,72 @@ app.post("/api/add-pc", async (req, res) => {
 
 // ✅ ENTRY API (PC se data)
 app.post("/api/entry", async (req, res) => {
+
   const data = req.body;
 
   const pc = await PC.findOne({ pcCode: data.pcCode });
   if (!pc) return res.json({ success: false, msg: "PC not registered" });
 
-  await Entry.create(data);
+  // check student already inside
+  const activeStudent = await Entry.findOne({
+    enroll: data.enrollment,
+    exitTime: null
+  });
+
+  if (activeStudent) {
+    return res.json({
+      success: false,
+      msg: "Student already inside lab"
+    });
+  }
+
+  // check pc busy
+  const pcBusy = await Entry.findOne({
+    pcCode: data.pcCode,
+    exitTime: null
+  });
+
+  if (pcBusy) {
+    return res.json({
+      success: false,
+      msg: "This PC already in use"
+    });
+  }
+
+  await Entry.create({
+    name: data.name,
+    enroll: data.enrollment,
+    branch: data.branch,
+    course: data.course,
+    pc: data.pc,
+    pcCode: data.pcCode,
+    entryTime: new Date(),
+    exitTime: null
+  });
+
   res.json({ success: true });
+
 });
 
+app.post("/api/exit", async (req, res) => {
+
+  const { pcCode } = req.body;
+
+  const active = await Entry.findOne({
+    pcCode: pcCode,
+    exitTime: null
+  });
+
+  if (!active) {
+    return res.json({ success: false });
+  }
+
+  active.exitTime = new Date();
+  await active.save();
+
+  res.json({ success: true });
+
+});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log("Server running on " + PORT));
@@ -96,7 +155,7 @@ app.get("/api/pcs", async (req, res) => {
 
 // ✅ GET Entries
 app.get("/api/entries", async (req, res) => {
-  const entries = await Entry.find().sort({ time: -1 });
+  const entries = await Entry.find().sort({ entryTime: -1 })
   res.json(entries);
 });
 
