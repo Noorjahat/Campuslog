@@ -8,8 +8,8 @@ app.use(express.json());
 
 const path = require("path");
 
-// ✅ static serve
-app.use(express.static(path.resolve(__dirname, "../../Frontend")));
+// static serve
+app.use(express.static(path.resolve(__dirname, "../Frontend")));
 
 // 🔹 MongoDB connect
 mongoose.connect(process.env.MONGO_URI);
