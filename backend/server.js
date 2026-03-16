@@ -33,6 +33,16 @@ const entrySchema = new mongoose.Schema({
 });
 const Entry = mongoose.model("Entry", entrySchema);
 
+app.get("/delete/:time", async (req, res) => {
+
+  const time = req.params.time;
+
+  await Entry.deleteOne({ time: time });
+
+  res.json({ success: true });
+
+});
+
 
 // ✅ ADD PC API (admin panel)
 app.post("/api/add-pc", async (req, res) => {
