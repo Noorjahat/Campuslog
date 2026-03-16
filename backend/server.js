@@ -7,7 +7,7 @@ app.use(cors());
 app.use(express.json());
 
 // 🔹 MongoDB connect
-mongoose.connect("mongodb://127.0.0.1:27017/campuslog");
+mongoose.connect(process.env.MONGO_URI);
 
 // 🔹 PC Schema
 const pcSchema = new mongoose.Schema({
@@ -52,7 +52,8 @@ app.post("/api/entry", async (req, res) => {
 });
 
 
-app.listen(5000, () => console.log("Server running on 5000"));
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log("Server running on " + PORT));
 
 // ✅ SIGNUP
 app.post("/signup", async (req, res) => {
