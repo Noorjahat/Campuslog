@@ -71,3 +71,9 @@ app.post("/login", async (req, res) => {
 
   res.json({ status: "ok", name: user });
 });
+
+// ✅ GET PCs
+app.get("/api/pcs", async (req, res) => {
+  const pcs = await PC.find();
+  res.json(pcs);
+});

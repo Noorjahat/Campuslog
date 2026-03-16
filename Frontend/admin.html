@@ -651,16 +651,16 @@ function getPCs(){
 return JSON.parse(localStorage.getItem("adminPCs")||"[]");
 }
 
-function renderPCs(){
+async function renderPCs() {
+  const res = await fetch("http://127.0.0.1:5000/api/pcs");
+  const pcs = await res.json();
 
-let pcs=getPCs();
+  let ul = document.getElementById("pcList");
+  ul.innerHTML = "";
 
-let ul=document.getElementById("pcList");
-ul.innerHTML="";
-
-pcs.forEach(pc=>{
-ul.innerHTML+=`<li>${pc}</li>`;
-});
+  pcs.forEach(p => {
+    ul.innerHTML += `<li>${p.pcCode}</li>`;
+  });
 }
 
 async function addPC() {
@@ -677,6 +677,7 @@ async function addPC() {
   if (data.success) alert("PC Added ✅");
   else alert("Error ❌");
 }
+renderPCs();
 </script>
 
 </body>
