@@ -9,14 +9,22 @@ app.use(express.json());
 const path = require("path");
 
 // 👉 frontend folder serve karega
-app.use(express.static(path.join(__dirname, "../frontend")));
+app.use(express.static(path.join(__dirname, "../../frontend")));
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/login.html"));
+  res.sendFile(path.join(__dirname, "../../frontend/login.html"));
 });
 
 app.get("/admin", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/admin.html"));
+  res.sendFile(path.join(__dirname, "../../frontend/admin.html"));
+});
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "../../frontend/signup.html"));
+});
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "../../frontend/changepass.html"));
 });
 
 // 🔹 MongoDB connect
