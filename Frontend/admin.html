@@ -405,7 +405,7 @@ return JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]");
 
 function renderTable(){
 
-fetch("http://127.0.0.1:5000/api/entries")
+fetch("https://campuslog.onrender.com/api/entries")
 .then(res=>res.json())
 .then(data=>{
 const q=document.getElementById("searchInput").value.toLowerCase();
@@ -652,7 +652,7 @@ return JSON.parse(localStorage.getItem("adminPCs")||"[]");
 }
 
 async function renderPCs() {
-  const res = await fetch("http://127.0.0.1:5000/api/pcs");
+  const res = await fetch("https://campuslog.onrender.com/api/pcs");
   const pcs = await res.json();
 
   let ul = document.getElementById("pcList");
@@ -666,7 +666,7 @@ async function renderPCs() {
 async function addPC() {
   const pcCode = document.getElementById("pcCodeInput").value;
 
-  const res = await fetch("http://127.0.0.1:5000/api/add-pc", {
+  const res = await fetch("https://campuslog.onrender.com/api/add-pc", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ pcCode, accountId: "admin1" })
