@@ -362,6 +362,7 @@ This Month <span id="monthCount" style="font-size:28px;font-weight:700;">0</span
 <div class="table-controls" style="max-width:420px;">
 <input id="pcCodeInput" placeholder="Enter PC Code">
 <button class="exportBtn" onclick="addPC()">Add PC</button>
+<button onclick="addPC()">Add PC</button>
 </div>
 
 <h3 style="margin-top:20px;">Added PCs</h3>
@@ -703,6 +704,20 @@ ul.innerHTML+=`<li>${pc}</li>`;
 });
 }
 
+async function addPC() {
+  const pcCode = document.getElementById("pcCodeInput").value;
+
+  const res = await fetch("http://127.0.0.1:5000/api/add-pc", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ pcCode, accountId: "admin1" })
+  });
+
+  const data = await res.json();
+
+  if (data.success) alert("PC Added ✅");
+  else alert("Error ❌");
+}
 </script>
 
 </body>
