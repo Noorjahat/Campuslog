@@ -9,24 +9,22 @@ app.use(express.json());
 const path = require("path");
 
 // ✅ static serve
-app.use(express.static(path.join(__dirname, "../../Frontend")));
-
-// ✅ ROUTES (IMPORTANT ORDER)
+app.use(express.static(path.resolve(__dirname, "../../Frontend")));
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../../Frontend/login.html"));
-});
-
-app.get("/admin", (req, res) => {
-  res.sendFile(path.join(__dirname, "../../Frontend/admin.html"));
+  res.sendFile(path.resolve(__dirname, "../../Frontend/login.html"));
 });
 
 app.get("/signup", (req, res) => {
-  res.sendFile(path.join(__dirname, "../../Frontend/signup.html"));
+  res.sendFile(path.resolve(__dirname, "../../Frontend/signup.html"));
 });
 
 app.get("/changepass", (req, res) => {
-  res.sendFile(path.join(__dirname, "../../Frontend/changepass.html"));
+  res.sendFile(path.resolve(__dirname, "../../Frontend/changepass.html"));
+});
+
+app.get("/admin", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "../../Frontend/admin.html"));
 });
 
 // 🔹 MongoDB connect
