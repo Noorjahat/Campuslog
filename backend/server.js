@@ -8,8 +8,10 @@ app.use(express.json());
 
 const path = require("path");
 
-// 👉 frontend folder serve karega
+// ✅ static serve
 app.use(express.static(path.join(__dirname, "../../Frontend")));
+
+// ✅ ROUTES (IMPORTANT ORDER)
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../../Frontend/login.html"));
