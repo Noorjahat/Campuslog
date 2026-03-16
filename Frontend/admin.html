@@ -678,6 +678,52 @@ async function addPC() {
   else alert("Error ❌");
 }
 renderPCs();
+
+async function loadDashboard() {
+
+  const res = await fetch("/api/entries");
+  const data = await res.json();
+
+  const today = new Date().toDateString();
+
+  let todayCount = 0;
+  let weekCount = 0;
+  let monthCount = 0;
+
+  const now = new Date();
+
+  data.forEach(e => {
+
+    const entryDate = new Date(e.time);
+
+    // Today
+    if (entryDate.toDateString() === today) {
+      todayCount++;
+    }
+
+    // Week
+    const diffDays = (now - entryDate) / (1000 * 60 * 60 * 24);
+    if (diffDays <= 7) {
+      weekCount++;
+    }
+
+    // Month
+    if (
+      entryDate.getMonth() === now.getMonth() &&
+      entryDate.getFullYear() === now.getFullYear()
+    ) {
+      monthCount++;
+    }
+
+  });
+
+  document.getElementById("todayCount").innerText = todayCount;
+  document.getElementById("weekCount").innerText = weekCount;
+  document.getElementById("monthCount").innerText = monthCount;
+
+}
+
+loadDashboard();
 </script>
 
 </body>
