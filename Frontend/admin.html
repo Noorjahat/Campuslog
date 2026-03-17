@@ -440,7 +440,7 @@ if(branchName==="general") branchName="General";
 tbody.innerHTML+=`
 <tr>
 <td><input type="checkbox" class="rowCheck" data-id="${e.time}" onchange="toggleDeleteBtn()"></td>
-<td>${new Date(e.time).toLocaleString()}</td>
+<td>${new Date(e.entryTime).toLocaleString()}</td>
 <td>${e.name}</td>
 <td>${e.enroll}</td>
 <td>${branchName}</td>
@@ -672,7 +672,7 @@ async function loadDashboard() {
 
   data.forEach(e => {
 
-    const entryDate = new Date(e.time);
+    const entryDate = new Date(e.entryTime);
 
     // Today
     if (entryDate.toDateString() === today) {
