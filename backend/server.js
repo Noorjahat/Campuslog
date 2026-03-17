@@ -162,3 +162,11 @@ app.get("/api/entries", async (req, res) => {
 app.get("/", (req, res) => {
   res.sendFile(path.resolve(__dirname, "../Frontend/login.html"));
 });
+
+app.post("/api/delete-pc", async (req,res)=>{
+  const { codes } = req.body;
+
+  await PC.deleteMany({ pcCode: { $in: codes } });
+
+  res.json({ success:true });
+});

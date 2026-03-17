@@ -365,6 +365,11 @@ This Month <span id="monthCount" style="font-size:28px;font-weight:700;">0</span
 </div>
 
 <h3 style="margin-top:20px;">Added PCs</h3>
+
+<button class="deleteBtn" onclick="deleteSelectedPCs()" style="margin-bottom:10px;">
+Delete Selected PCs
+</button>
+
 <ul id="pcList"></ul>
 
 </section>
@@ -628,7 +633,11 @@ async function renderPCs() {
   ul.innerHTML = "";
 
   pcs.forEach(p => {
-    ul.innerHTML += `<li>${p.pcCode}</li>`;
+    ul.innerHTML += `
+<li>
+  <input type="checkbox" class="pcCheck" value="${p.pcCode}">
+  ${p.pcCode}
+</li>`;
   });
 }
 
@@ -694,6 +703,35 @@ async function loadDashboard() {
 
 setInterval(renderTable, 5000);
 setInterval(loadDashboard, 5000);
+
+async function deleteSelectedPCs(){
+
+  const checks = document.querySelectorAll(".pcCheck:checked");
+
+  if(checks.length === 0){
+    alert("Select at least one PC");
+    return;
+  }
+
+  if(!confirm("Delete selected PCs?")) return;
+
+  const codes = Array.from(checks).map(c => c.value);
+
+  const res = await fetch("https://campuslog.onrender.com/api/delete-pc", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ codes })
+  });
+
+  const data = await res.json();
+
+  if(data.success){
+    alert("Deleted successfully ✅");
+    renderPCs();   // refresh list
+  } else {
+    alert("Delete failed ❌");
+  }
+}
 
 </script>
 
